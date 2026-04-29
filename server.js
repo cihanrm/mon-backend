@@ -1,10 +1,11 @@
 const express = require("express")
 const { Pool } = require("pg")
+require("dotenv").config()
 
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
-const SECRET = "monsecretjwt"
+const SECRET = process.env.SECRET_JWT
 
 
 const app = express()
@@ -14,13 +15,11 @@ app.use(express.json())
 
 
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "escale",
-    password: "user123",
-    port: 5432,
-
-
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 })
 
 app.get("/vols", verifierToken, async (req, res) =>{
@@ -142,6 +141,6 @@ function verifierToken(req, res, next) {
 //     res.json({ message: "Vol ajouté !", vol: nouveauVol })
 // })
 
-app.listen(3000, () => {
-    console.log("Serveur démarré sur le port 3000")
+app.listen(process.env.PORT, () => {
+    console.log(`Serveur démarré sur le port ${process.env.PORT}`)
 })
